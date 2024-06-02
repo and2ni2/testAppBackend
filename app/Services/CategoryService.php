@@ -14,13 +14,20 @@ class CategoryService
 
 
     /**
+     * @param bool $inline
      * @return JsonResponse
      */
-    public function list(): JsonResponse
+    public function list(bool $inline): JsonResponse
     {
-        $categories = RequestCategory::whereNull('parent_id')->with('children')->get();
+        $categories = RequestCategory::query();
 
-        return $this->response($categories);
+        if ($inline) {
+            $data = $categories->get();
+        } else {
+            $data = $categories->whereNull('parent_id')->with('children')->get();
+        }
+
+        return $this->response($data);
     }
 
 }

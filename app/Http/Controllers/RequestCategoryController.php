@@ -19,7 +19,12 @@ class RequestCategoryController extends Controller
      */
     public function list(Request $request): JsonResponse
     {
-        return $this->categoryService->list();
+        $inline = false;
+        if ($request->input('inline')) {
+            $inline = true;
+        }
+
+        return $this->categoryService->list($inline);
     }
 
 }
