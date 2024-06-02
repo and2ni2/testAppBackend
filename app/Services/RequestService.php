@@ -109,4 +109,29 @@ class RequestService
     }
 
 
+    /**
+     * @param array $data
+     * @return JsonResponse
+     */
+    public function sendMessage(array $data): JsonResponse
+    {
+        try {
+            $requestItem = RequestItem::find($data['request_id']);
+
+            if (!$requestItem->closed_at) {
+                RequestMessage::query()->create([
+                    'user_id' => $this->user->id,
+                    'request_id' => $data['request_id'],
+                    'message' => $data['message'],
+                ]);
+
+                return $this->response([], ['Сообщение успешно добавлено']);
+            }
+
+            return $this->error(['Данная заявка уже закрыта'], 400);
+        } catch (Exception $exception) {
+            return $this->error([$exception->getMessage()], 400);
+        }
+    }
+
 }
