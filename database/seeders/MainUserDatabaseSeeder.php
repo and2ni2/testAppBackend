@@ -21,7 +21,6 @@ class MainUserDatabaseSeeder extends Seeder
         $managerPermissions = [
             'view requests',
             'create requests',
-            'close requests',
             'add messages',
             'view messages',
             'create categories',
@@ -34,6 +33,8 @@ class MainUserDatabaseSeeder extends Seeder
             'create requests',
             'add messages',
             'view messages',
+            'view categories',
+            'close requests',
         ];
 
         $allPermissions = array_unique(array_merge($managerPermissions, $userPermissions));

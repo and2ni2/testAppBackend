@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -13,6 +14,7 @@ class AuthService
     use ApiResponse;
 
     public function __construct() {}
+
 
     /**
      * @param array $data
@@ -47,6 +49,17 @@ class AuthService
         return $this->response([
             'token' => $user->createToken($user->email.'-AuthToken')->plainTextToken
         ]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->tokens()->delete();
+        return $this->ok();
     }
 
 }

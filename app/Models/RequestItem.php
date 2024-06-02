@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RequestItem extends Model
 {
@@ -23,5 +24,11 @@ class RequestItem extends Model
         'file_path',
         'closed_at'
     ];
+
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(RequestMessage::class, 'request_id', 'id');
+    }
 
 }

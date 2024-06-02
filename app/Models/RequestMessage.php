@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RequestMessage extends Model
 {
@@ -19,4 +20,11 @@ class RequestMessage extends Model
         'request_id',
         'message',
     ];
+
+
+    public function request(): BelongsTo
+    {
+        return $this->belongsTo(RequestItem::class, 'id', 'request_id');
+    }
+
 }

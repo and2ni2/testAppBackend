@@ -33,4 +33,13 @@ class AuthController extends Controller
     {
         return $this->authService->login($request->validated());
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        return $this->authService->logout($request);
+    }
 }
