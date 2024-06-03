@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('middle_name')->after('name')->nullable();
             $table->string('last_name')->after('name');
             $table->boolean('gender')->after('email');
-            $table->boolean('mobile')->after('email')->nullable();
+            $table->string('mobile')->after('email')->nullable();
         });
     }
 

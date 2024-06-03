@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RequestItem extends Model
 {
@@ -29,6 +31,21 @@ class RequestItem extends Model
     public function messages(): HasMany
     {
         return $this->hasMany(RequestMessage::class, 'request_id', 'id');
+    }
+
+    public function originalMessage(): HasOne
+    {
+        return $this->hasOne(RequestMessage::class, 'request_id', 'id')->oldest();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(RequestCategory::class);
     }
 
 }

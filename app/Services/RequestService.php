@@ -1,6 +1,8 @@
 <?php
 namespace App\Services;
 
+use App\Http\Resources\ManagerRequestsCollection;
+use App\Http\Resources\ManagerRequestsResource;
 use App\Models\RequestCategory;
 use App\Models\RequestItem;
 use App\Models\RequestMessage;
@@ -8,8 +10,10 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use mysql_xdevapi\Collection;
 
 class RequestService
 {
@@ -30,6 +34,12 @@ class RequestService
     {
         DB::beginTransaction();
         try {
+            $existRequest = RequestItem::query()->where('user_id', $this->user->id)->whereDate('created_at', Carbon::today())->first();
+
+            if ($existRequest) {
+                return $this->error(['В день можно создавать только 1 заявку'], 400);
+            }
+
             $request = RequestItem::query()->create([
                 'user_id' => $this->user->id,
                 'category_id' => $data['category_id'],
@@ -68,13 +78,15 @@ class RequestService
     /**
      * @return JsonResponse
      */
-    public function list(): JsonResponse
+    public function list():  JsonResponse
     {
         // Если авторизованный пользователь менеджер отдаем все не закрытые заявки иначе все заявки авторизованного пользователя
         if ($this->user->hasRole('manager')) {
-            $requests = RequestItem::query()->whereNull('closed_at')->paginate(15);
+            $requests = RequestItem::query()->whereNull('closed_at')->with(['user', 'originalMessage'])->paginate(10);
+
+            return $this->response(ManagerRequestsResource::collection($requests)->response()->getData());
         } else {
-            $requests = RequestItem::query()->where('user_id', $this->user->id)->orderBy('id', 'desc')->paginate(15);
+            $requests = RequestItem::query()->where('user_id', $this->user->id)->orderBy('id', 'desc')->paginate(10);
         }
 
         return $this->response($requests);
