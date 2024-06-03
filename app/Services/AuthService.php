@@ -41,6 +41,7 @@ class AuthService
     public function login(array $data): JsonResponse
     {
         $user = User::where('email', $data['email'])->first();
+        $user->getRoleNames();
 
         if(!$user || !Hash::check($data['password'],$user->password)){
             return $this->error(['Неверные учетные данные'], 401);
