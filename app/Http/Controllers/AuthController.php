@@ -38,6 +38,15 @@ class AuthController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function getUser(Request $request): JsonResponse
+    {
+        return $this->authService->getUser($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function logout(Request $request): JsonResponse
     {
         return $this->authService->logout($request);

@@ -14,6 +14,7 @@ Route::prefix('user')->name('user.')->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('get-user', [AuthController::class, 'getUser'])->name('get-user');
     Route::prefix('request')->name('request.')->group(function () {
         Route::get('list', [RequestController::class, 'list'])->middleware(['permission:view requests'])->name('send');
         Route::post('create', [RequestController::class, 'create'])->middleware(['permission:create requests'])->name('create');

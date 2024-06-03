@@ -41,7 +41,6 @@ class AuthService
     public function login(array $data): JsonResponse
     {
         $user = User::where('email', $data['email'])->first();
-        $user->getRoleNames();
 
         if(!$user || !Hash::check($data['password'],$user->password)){
             return $this->error(['Неверные учетные данные'], 401);
@@ -49,10 +48,20 @@ class AuthService
 
         return $this->response([
             'token' => $user->createToken($user->email.'-AuthToken')->plainTextToken,
-            'user' => $user,
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getUser(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $user->getRoleNames();
+
+        return $this->response($user);
+    }
 
     /**
      * @param Request $request
