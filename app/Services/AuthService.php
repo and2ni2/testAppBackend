@@ -48,7 +48,7 @@ class AuthService
 
         return $this->response([
             'token' => $user->createToken($user->email.'-AuthToken')->plainTextToken,
-            'roles' => $user->getRoleNames(),
+            'user' => $user,
         ]);
     }
 
