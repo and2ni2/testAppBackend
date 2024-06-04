@@ -27,4 +27,9 @@ class RequestMessage extends Model
         return $this->belongsTo(RequestItem::class, 'id', 'request_id');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

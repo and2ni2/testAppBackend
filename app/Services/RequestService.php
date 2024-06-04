@@ -82,7 +82,7 @@ class RequestService
     {
         // Если авторизованный пользователь менеджер отдаем все не закрытые заявки иначе все заявки авторизованного пользователя
         if ($this->user->hasRole('manager')) {
-            $requests = RequestItem::query()->whereNull('closed_at')->with(['user', 'originalMessage'])->paginate(10);
+            $requests = RequestItem::query()->whereNull('closed_at')->with(['user', 'originalMessage'])->orderBy('updated_at', 'desc')->paginate(10);
 
             return $this->response(ManagerRequestsResource::collection($requests)->response()->getData());
         } else {
@@ -98,7 +98,7 @@ class RequestService
      */
     public function show(object $model): JsonResponse
     {
-        $requestItem = RequestItem::with('messages')->find($model->id);
+        $requestItem = RequestItem::with('messages.user')->find($model->id);
 
         return $this->response($requestItem);
     }
