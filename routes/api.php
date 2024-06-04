@@ -18,7 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('request')->name('request.')->group(function () {
         Route::get('list', [RequestController::class, 'list'])->middleware(['permission:view requests'])->name('send');
         Route::post('create', [RequestController::class, 'create'])->middleware(['permission:create requests'])->name('create');
-        Route::get('show/{id}', [RequestController::class, 'show'])->middleware(['permission:view requests'])->name('close');
+        Route::get('show/{id}', [RequestController::class, 'show'])->middleware(['permission:view requests'])->name('show');
         Route::put('close/{id}', [RequestController::class, 'close'])->middleware(['permission:close requests'])->name('close');
 
         Route::prefix('category')->name('category.')->group(function () {
